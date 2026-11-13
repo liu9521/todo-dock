@@ -1,0 +1,26 @@
+# 仅用于声明项目元数据与工具配置。
+# TodoDock 以「脚本 / 单文件 exe」方式分发，不作为 PyPI 包发布，
+# 因此这里刻意不配置 [build-system]。
+[project]
+name = "tododock"
+version = "1.0.0"
+description = "桌面右下角常驻的待办胶囊：月历建待办、当天与提前一天提醒、实时金价"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "TodoDock contributors" }]
+keywords = ["todo", "desktop-widget", "tkinter", "calendar", "reminder", "gold-price"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Topic :: Office/Business :: Scheduling",
+]
+
+[tool.tododock]
+gui_entry = "src/todo_dock.py"
+cli_entry = "src/todo.py"
+runtime_dependencies = []

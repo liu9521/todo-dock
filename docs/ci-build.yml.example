@@ -1,0 +1,72 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-windows:
+    name: Build Windows x64 exe
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Check syntax
+        run: python -m py_compile src/todo_dock.py src/todo.py
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-build.txt
+
+      - name: Build exe and release zip
+        run: python build_exe.py
+
+      - name: Verify artifacts
+        shell: pwsh
+        run: |
+          Get-ChildItem dist | Select-Object Name, Length
+          $exe = Get-Item "dist/TodoDock.exe"
+          if ($exe.Length -lt 3MB) { throw "exe is unexpectedly small: $($exe.Length)" }
+          if (-not (Test-Path "dist/SHA256SUMS.txt")) { throw "missing checksums" }
+          Get-Content "dist/SHA256SUMS.txt"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TodoDock-win64
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          body_path: RELEASE_NOTES.md
+          generate_release_notes: true
+          fail_on_unmatched_files: true

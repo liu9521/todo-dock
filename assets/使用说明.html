@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>待办胶囊 · 使用说明</title>
+<style>
+  :root{--page:#f4f7fc;--card:#fff;--line:#e7ecf5;--text:#1e2433;--sub:#4a5468;
+        --muted:#8b94a7;--blue:#4a6cf7;--soft:#eef3ff;--warn:#dd8324;--red:#e0484d;--green:#18a36b}
+  *{box-sizing:border-box}
+  body{margin:0;padding:36px 22px 60px;background:var(--page);color:var(--text);
+       font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;line-height:1.7}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{font-size:24px;margin:0 0 6px}
+  .lede{color:var(--sub);font-size:14px;margin:0 0 28px}
+  h2{font-size:16px;margin:32px 0 12px;display:flex;align-items:center;gap:9px}
+  h2::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--blue)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+  .row{display:flex;gap:14px;padding:11px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+  .row:last-child{border:0;padding-bottom:2px}
+  .row:first-child{padding-top:2px}
+  .k{flex:0 0 122px;font-size:13px;font-weight:600;background:var(--soft);color:#3454c9;
+     border-radius:8px;padding:4px 9px;text-align:center}
+  .k.g{background:#e8f8ef;color:#0e9f57}
+  .k.o{background:#fff3e3;color:#b76a12}
+  .v{font-size:13.5px;color:var(--sub)}
+  .v b{color:var(--text)}
+  code{background:#f0f3f9;border-radius:5px;padding:2px 6px;font-size:12.5px;
+       font-family:Consolas,"Courier New",monospace;color:#2b3b66}
+  .note{background:#fff8e9;border-left:3px solid var(--warn);padding:10px 14px;
+        border-radius:0 8px 8px 0;font-size:13px;color:#7a5a20;margin-top:14px}
+  ul{margin:6px 0 0;padding-left:20px;font-size:13.5px;color:var(--sub)}
+  li{margin:4px 0}
+  .up{color:var(--red);font-weight:600}
+  .down{color:var(--green);font-weight:600}
+  .foot{margin-top:34px;color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>待办胶囊 · 使用说明</h1>
+  <p class="lede">桌面右下角常驻的小胶囊，点开是最近待办 + 月历。支持两类待办：
+     <b>带日期的日程</b>（当天 / 提前一天提醒）和<b>不设日期的近期待办</b>。
+     胶囊第二行实时显示浙商银行积存金价格。待办数据全部存在本机；只有金价读取一个公开行情接口。</p>
+
+  <h2>一、折叠态小胶囊</h2>
+  <div class="card">
+    <div class="row"><div class="k">第一行</div><div class="v">
+      <b>待办总数 · 今日几条 · 近期几条 · 日期</b>，像输入法状态栏一样贴在任务栏上方。</div></div>
+    <div class="row"><div class="k g">第二行</div><div class="v">
+      <b>浙商金 841.82 元/克 ▲ +1.06% 11:18</b>（浙商银行积存金实时价、涨跌幅、报价时间）。
+      涨用<span class="up">红色</span>、跌用<span class="down">绿色</span>（A 股习惯，价格数字和
+      涨跌幅一起染色、涨跌粗体）。<b>每 5 秒自动刷新</b>，<b>点这一行可立即刷新</b>；
+      断网时继续显示上次报价，时间后带 <code>*</code> 标记。</div></div>
+    <div class="row"><div class="k">点第一行</div><div class="v">展开面板；点面板外或「收起」收回。按住第一行可拖动，位置会被记住。</div></div>
+  </div>
+  <div class="note">金价数据来自京东金融「浙商银行积存金」公开实时报价接口（无需登录、无需密钥）。
+    程序只读取行情，不会上传待办内容或任何个人数据。完全不想联网的话，用
+    <code>pythonw.exe todo_dock.py --nogold</code> 启动即可关闭行情。</div>
+
+  <h2>二、两类待办怎么建</h2>
+  <div class="card">
+    <div class="row"><div class="k g">近期待办</div><div class="v">点面板上的
+      <b>「+ 近期」</b>或日历导航行的<b>「近期」</b> → 底部标题变成「近期待办 · 不设日期」→
+      在输入框直接写内容按回车。这类待办<b>不绑定任何日期、不提醒</b>，标签显示「近期」，
+      随时做随时勾。命令行里 <code>todo.py add "标题"</code>（不带 --due）也是这一类。</div></div>
+    <div class="row"><div class="k o">日期待办</div><div class="v">点月历里任意日期（或「今天」）→ 下方标题变成那天 →
+      输入内容按回车。这类待办可设提醒时刻与「当天 / 提前1天」开关。</div></div>
+    <div class="row"><div class="k">排序</div><div class="v">最近待办按
+      <b>紧急（逾期 / 今天 / 明天）→ 近期（不设日期）→ 之后（有确定日期）</b> 排列；
+      近期待办不会盖住今天到期的急事，也不会沉到最底。</div></div>
+    <div class="row"><div class="k">互相转换</div><div class="v"><code>todo.py setdue 3 2026-11-20</code> 给近期待办补日期；
+      <code>todo.py setdue 3 none</code> 去掉日期改回近期待办。</div></div>
+    <div class="row"><div class="k g">长标题看全文</div><div class="v">列表里放不下的标题会以 <b>…</b> 收尾；
+      <b>把鼠标停在这条待办上约 0.3 秒</b>，旁边会弹出浅色气泡显示<b>完整标题</b>（自动换行，
+      下面还标着「近期」或日期时刻），鼠标移开自动消失。短标题本来就完整，不会弹气泡。
+      列表右侧的「近期 / 日期」标签始终完整显示，不会被长标题挤掉。
+      提醒弹窗里的长标题也会自动换行展示全文。</div></div>
+    <div class="row"><div class="k">完成 / 删除</div><div class="v">每条左边的 <b>○</b> 点一下标记完成，右边 <b>×</b> 删除。</div></div>
+    <div class="row"><div class="k">日历标记</div><div class="v">有待办的日期下方有<b>蓝点</b>，今天浅蓝底，选中日深蓝底。
+      切到「近期」模式时不再有选中日，只保留今天高亮。</div></div>
+  </div>
+
+  <h2>三、提醒规则（仅日期待办）</h2>
+  <div class="card">
+    <div class="row"><div class="k o">提醒时刻</div><div class="v">每条可设 <code>HH:MM</code>（默认 09:00），在输入框下方填写。</div></div>
+    <div class="row"><div class="k o">当天 / 提前一天</div><div class="v">截止日当天、前一天的同一时刻各弹一次；
+      两个勾选框可分别开关，都不勾 = 不提醒。<b>近期待办没有日期，这几个控件会变灰不可用。</b></div></div>
+    <div class="row"><div class="k">试一次提醒</div><div class="v">面板右下角「试一次提醒」立即弹一条演示提醒，确认弹窗和提示音正常。</div></div>
+    <div class="row"><div class="k">补发</div><div class="v">到点时没开机，开机后 20 小时内补发一次；
+      每条提醒只弹一次（记录在 <code>notified</code>）。弹窗按钮：「标记完成」归档，「知道了」只关窗，60 秒自动收起。</div></div>
+  </div>
+  <div class="note">提醒依赖挂件常驻。已配置开机自启；手动关掉后，双击桌面上的
+    <b>待办胶囊.vbs</b> 即可重新挂上。</div>
+
+  <h2>四、命令行（可选）</h2>
+  <div class="card">
+    <div class="row"><div class="k">近期待办</div><div class="v"><code>todo.py add "买猫粮"</code>（不带 --due 即不设日期）</div></div>
+    <div class="row"><div class="k">带日期新增</div><div class="v"><code>todo.py add "交房租" --due 2026-11-16 --time 09:00</code></div></div>
+    <div class="row"><div class="k">提醒组合</div><div class="v"><code>--remind both|day|eve|none</code></div></div>
+    <div class="row"><div class="k">改 / 去日期</div><div class="v"><code>todo.py setdue 3 2026-11-20 --time 14:00</code>、
+      <code>todo.py setdue 3 none</code></div></div>
+    <div class="row"><div class="k g">查金价</div><div class="v"><code>todo.py gold</code> 立刻显示最新价、涨跌、昨收、报价时间；
+      <code>todo.py status</code> 会顺带显示金价缓存。</div></div>
+    <div class="row"><div class="k">看清单</div><div class="v"><code>todo.py list</code> / <code>list --all</code> /
+      <code>list --full</code>（长标题不截断，显示全文）；
+      <code>done</code>、<code>remove</code>、<code>progress</code>、<code>rename</code> 用法不变。</div></div>
+    <div class="row"><div class="k">启停</div><div class="v"><code>todo.py status</code>、<code>install</code>、<code>start</code>、
+      <code>stop</code>、<code>autostart on|off|status</code>；<code>start --legacy</code> 切回旧版进度条界面。</div></div>
+  </div>
+
+  <h2>五、文件都在哪</h2>
+  <div class="card">
+    <ul>
+      <li>程序与数据：<code>~/.workbuddy/todo-widget/</code>，主程序 <code>todo_dock.py</code>，待办数据 <code>data.json</code>。</li>
+      <li>金价缓存：<code>gold_cache.json</code>（单独存放，不写 data.json，不会触发待办热加载）；运行日志 <code>dock.log</code>。</li>
+      <li>待办命令行改完约 0.3 秒自动刷新，不用重启窗口。</li>
+      <li>日期字段：<code>due</code>、<code>time</code>、<code>remind</code>、<code>notified</code>；
+          近期待办<b>没有</b>这些字段，旧数据也兼容。</li>
+      <li>删除待办前有单份滚动备份 <code>data.json.backup-cli</code>。</li>
+    </ul>
+  </div>
+
+  <div class="foot">待办数据本地存储 · 仅金价读取公开行情接口 · 不上传任何待办内容</div>
+</div>
+</body>
+</html>

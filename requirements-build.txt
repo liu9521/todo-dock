@@ -1,0 +1,2 @@
+# 仅构建 Windows exe 时需要；运行程序不需要安装任何东西。
+pyinstaller>=6.11,<7

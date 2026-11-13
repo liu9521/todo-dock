@@ -1,0 +1,44 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+
+# ---- PyInstaller 构建产物 ----
+build/
+dist/
+.cache/
+*.spec
+version_info.txt
+
+# ---- 发布包（本地生成，不入库；二进制走 GitHub Release） ----
+*.zip
+*.7z
+*.exe
+!assets/*.ico
+
+# ---- 运行时数据 / 日志 / 本机状态 ----
+data.json
+data.json.*
+gold_cache.json
+dock.log
+clicks.log
+.running
+portable.txt
+TODO_WIDGET_HOME/
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~

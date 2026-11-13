@@ -1,0 +1,9 @@
+# TodoDock 运行时零第三方依赖 —— 只使用 Python 标准库。
+#
+# 需要 Python 3.9+ 且编译了 tkinter（Tcl/Tk）：
+#   - Windows / macOS：CPython 官方安装包已内置
+#   - Debian / Ubuntu：sudo apt install python3-tk
+#   - Fedora：         sudo dnf install python3-tkinter
+#
+# 本文件刻意保持为空依赖列表，pip install -r requirements.txt 会正常成功。
+# 构建 exe 所需的工具另见 requirements-build.txt。

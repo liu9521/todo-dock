@@ -1,0 +1,15 @@
+# 统一换行，避免跨平台 diff 噪音
+* text=auto
+
+*.py   text eol=lf
+*.md   text eol=lf
+*.html text eol=lf
+*.yml  text eol=lf
+*.toml text eol=lf
+*.txt  text eol=lf
+
+# 二进制资源
+*.png  binary
+*.ico  binary
+*.exe  binary
+*.zip  binary
